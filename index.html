@@ -63,19 +63,51 @@
         form button:hover {
             background-color: #5b6eae;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
         <h1>FREE MC SERVER</h1>
-        <form action="register.php" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-            <input type="email" name="email" placeholder="Email" required>
+        <!-- Formulario que captura datos y los guarda localmente -->
+        <form id="registerForm">
+            <input type="text" id="reg-username" placeholder="Username" required>
+            <input type="password" id="reg-password" placeholder="Password" required>
+            <input type="password" id="reg-confirm-password" placeholder="Confirm Password" required>
+            <input type="email" id="reg-email" placeholder="Email" required>
             <button type="submit">Register</button>
         </form>
     </div>
+
+    <script>
+        // Capturar el formulario y guardar datos en localStorage
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
+
+            // Obtener valores del formulario
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const email = document.getElementById('reg-email').value;
+
+            // Validar si las contraseñas coinciden
+            if (password !== confirmPassword) {
+                alert("Error: Las contraseñas no coinciden.");
+                return;
+            }
+
+            // Crear objeto con los datos del formulario
+            const userData = {
+                username: username,
+                password: password,
+                email: email
+            };
+
+            // Guardar datos en localStorage
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // Confirmar registro exitoso
+            alert("Registro exitoso. Los datos han sido guardados en localStorage.");
+        });
+    </script>
 </body>
 </html>
