@@ -78,7 +78,8 @@
             border-radius: 50%;
         }
 
-        .login-btn a {
+        .login-btn a,
+        .profile-menu {
             text-decoration: none;
             color: white;
             background-color: #7289da;
@@ -88,7 +89,42 @@
             transition: background-color 0.3s ease;
         }
 
-        .login-btn a:hover {
+        .login-btn a:hover,
+        .profile-menu:hover {
+            background-color: #677bc4;
+        }
+
+        /* Estilo del menú del perfil */
+        .profile-menu {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: #2f3136;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .profile-dropdown ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-dropdown ul li {
+            padding: 10px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-dropdown ul li:hover {
             background-color: #677bc4;
         }
 
@@ -261,9 +297,6 @@
     <meta name="description" content="Discusión general en Infinity Galaxy">
     <title>Discusión General - Infinity Galaxy</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Tus estilos permanecen igual */
-    </style>
 </head>
 <body>
 
@@ -275,11 +308,11 @@
         </div>
         <nav>
             <ul>
-                <li><a href="rule.html"><i class="fas fa-home"></i>Rules</a></li>
+                <li><a href="rule.html"><i class="fas fa-home"></i> Rules</a></li>
                 <li><a href="https://discord.gg/fuwrNKaJBC"><i class="fab fa-discord"></i> Join My Server</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i>Members</a></li>
-                <li><a href="#"><i class="fas fa-bars"></i>Premium</a></li>
-                <li><a href="#"><i class="fas fa-gem"></i>Soporte </a></li>
+                <li><a href="#"><i class="fas fa-heart"></i> Members</a></li>
+                <li><a href="#"><i class="fas fa-bars"></i> Premium</a></li>
+                <li><a href="#"><i class="fas fa-gem"></i> Soporte </a></li>
             </ul>
         </nav>
         <div class="language-login">
@@ -287,168 +320,106 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Language Flag">
                 <span>EN</span>
             </div>
-            <div class="login-btn">
-                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></div>
+            <div class="login-btn" id="login-btn">
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+            <div class="profile-menu" id="profile-menu">
+                Perfil
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <ul>
+                        <li>Ver Perfil</li>
+                        <li>Configuración</li>
+                        <li id="logout">Cerrar Sesión</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </header>
 
     <div class="main-content">
         <div class="container">
+            <!-- Thread Section -->
             <div class="thread">
-                <h2>Discusión General</h2>
-                <p id="no-comments" class="no-comments">No existen comentarios aún.</p>
-                <div id="comments-container"></div>
+                <h2>Tema de Discusión 1</h2>
+                <div class="comment">
+                    <h3>Usuario1</h3>
+                    <p>Este es un comentario en el primer tema de discusión.</p>
+                    <span class="comment-date">Publicado el 12/09/2024</span>
+                    <span class="reaction-count" id="reaction-count-1">0</span>
+                    <i class="fas fa-heart heart-react" id="heart-1" onclick="toggleHeart(1)"></i>
+                </div>
             </div>
-
-            <div class="pagination">
-                <button id="prev-page">Anterior</button>
-                <span id="page-info">Página 1 de 1</span>
-                <button id="next-page">Siguiente</button>
-            </div>
-
+            <!-- Comment Form -->
             <div class="comment-form">
-                <h3>Agregar un comentario:</h3>
-                <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." required></textarea>
-                <button id="submit-comment">Enviar comentario</button>
+                <h3>Escribir Comentario</h3>
+                <textarea id="comment" placeholder="Escribe tu comentario aquí..."></textarea>
+                <button onclick="submitComment()">Enviar</button>
             </div>
         </div>
-
+        <!-- Recent Comments Section -->
         <div class="recent-comments">
             <h3>Comentarios Recientes</h3>
-            <div id="recent-comments-container"></div>
+            <div class="recent-comment">
+                <p>Usuario2 comentó en el tema 1.</p>
+            </div>
         </div>
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 Infinity Galaxy - Todos los derechos reservados.</p>
+        <p>Infinity Galaxy &copy; 2024</p>
     </div>
 
     <script>
-        const commentsContainer = document.getElementById('comments-container');
-        const recentCommentsContainer = document.getElementById('recent-comments-container');
-        const commentInput = document.getElementById('comment-input');
-        const submitCommentButton = document.getElementById('submit-comment');
-        const prevPageButton = document.getElementById('prev-page');
-        const nextPageButton = document.getElementById('next-page');
-        const pageInfo = document.getElementById('page-info');
-        const noCommentsMessage = document.getElementById('no-comments');
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileMenu = document.getElementById('profile-menu');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout');
 
-        let comments = [];
-        let currentPage = 1;
-        const commentsPerPage = 6;
+            // Simulación de autenticación usando localStorage
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
 
-        function renderComments() {
-            commentsContainer.innerHTML = '';
-            const startIndex = (currentPage - 1) * commentsPerPage;
-            const endIndex = startIndex + commentsPerPage;
-            const commentsToShow = comments.slice(startIndex, endIndex);
+            if (isLoggedIn) {
+                loginBtn.style.display = 'none';
+                profileMenu.style.display = 'block';
+            } else {
+                profileMenu.style.display = 'none';
+                loginBtn.style.display = 'block';
+            }
 
-            commentsToShow.forEach(comment => {
-                const commentElement = document.createElement('div');
-                commentElement.classList.add('comment');
-                commentElement.id = `comment-${comment.id}`;
-                commentElement.innerHTML = `
-                    <h3>${comment.username}</h3>
-                    <p>${comment.text}</p>
-                    <div class="comment-date">${comment.date}</div>
-                    <div class="heart-react ${comment.hasReacted ? 'active' : ''}" data-id="${comment.id}">&#10084;</div>
-                    <div class="reaction-count" data-id="${comment.id}">${comment.reactions}</div>
-                `;
-                commentsContainer.appendChild(commentElement);
+            profileMenu.addEventListener('click', function () {
+                profileDropdown.style.display = profileDropdown.style.display === 'none' || profileDropdown.style.display === '' ? 'block' : 'none';
             });
 
-            pageInfo.textContent = `Página ${currentPage} de ${Math.ceil(comments.length / commentsPerPage)}`;
-            prevPageButton.disabled = currentPage === 1;
-            nextPageButton.disabled = currentPage === Math.ceil(comments.length / commentsPerPage);
-
-            noCommentsMessage.style.display = comments.length === 0 ? 'block' : 'none';
-        }
-
-        function addComment(username, text) {
-            const newComment = {
-                id: comments.length + 1,
-                username,
-                text,
-                date: new Date().toLocaleDateString(),
-                reactions: 0,
-                hasReacted: false
-            };
-            comments.push(newComment);
-            renderComments();
-            renderRecentComments();
-        }
-
-        function renderRecentComments() {
-            recentCommentsContainer.innerHTML = '';
-            const recentComments = comments.slice(-5).reverse();
-
-            recentComments.forEach(comment => {
-                const recentCommentElement = document.createElement('div');
-                recentCommentElement.classList.add('recent-comment');
-                recentCommentElement.innerHTML = `
-                    <h4>${comment.username}</h4>
-                    <p>${comment.text}</p>
-                    <div class="comment-date">${comment.date}</div>
-                `;
-                recentCommentElement.addEventListener('click', () => {
-                    const commentElement = document.getElementById(`comment-${comment.id}`);
-                    if (commentElement) {
-                        commentElement.classList.add('highlight');
-                        setTimeout(() => {
-                            commentElement.classList.remove('highlight');
-                        }, 2000);
-                    }
-                });
-                recentCommentsContainer.appendChild(recentCommentElement);
+            logoutBtn.addEventListener('click', function () {
+                localStorage.removeItem('isLoggedIn');
+                location.reload();
             });
+        });
+
+        function submitComment() {
+            const comment = document.getElementById('comment').value;
+            if (comment.trim() === '') {
+                alert('No puedes enviar un comentario vacío');
+                return;
+            }
+            alert('Comentario enviado');
+            // Aquí puedes agregar la funcionalidad para enviar el comentario al servidor
         }
 
-        submitCommentButton.addEventListener('click', () => {
-            const username = localStorage.getItem('username') || 'Usuario';
-            const text = commentInput.value.trim();
+        function toggleHeart(id) {
+            const heartIcon = document.getElementById(`heart-${id}`);
+            const reactionCount = document.getElementById(`reaction-count-${id}`);
+            let count = parseInt(reactionCount.textContent);
 
-            if (text) {
-                addComment(username, text);
-                commentInput.value = '';
-                currentPage = Math.ceil(comments.length / commentsPerPage);
-                renderComments();
+            if (heartIcon.classList.contains('active')) {
+                heartIcon.classList.remove('active');
+                reactionCount.textContent = count - 1;
+            } else {
+                heartIcon.classList.add('active');
+                reactionCount.textContent = count + 1;
             }
-        });
-
-        prevPageButton.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderComments();
-            }
-        });
-
-        nextPageButton.addEventListener('click', () => {
-            if (currentPage < Math.ceil(comments.length / commentsPerPage)) {
-                currentPage++;
-                renderComments();
-            }
-        });
-
-        commentsContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('heart-react')) {
-                const commentId = e.target.dataset.id;
-                const comment = comments.find(c => c.id == commentId);
-
-                if (comment) {
-                    if (!comment.hasReacted) {
-                        comment.reactions++;
-                        comment.hasReacted = true;
-                    } else {
-                        comment.reactions--;
-                        comment.hasReacted = false;
-                    }
-                    renderComments();
-                }
-            }
-        });
-
-        renderComments();
-        renderRecentComments();
+        }
     </script>
 </body>
 </html>
