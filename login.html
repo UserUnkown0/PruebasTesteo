@@ -74,16 +74,54 @@
     </div>
 
     <script>
-        document.getElementById('userForm').addEventListener('submit', function(event) {
+        // Función para obtener la IP del usuario
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Error obteniendo la IP:', error);
+                return null;
+            }
+        }
+
+        // Verificar si la IP está registrada en localStorage
+        async function checkUserSession() {
+            const storedUsername = localStorage.getItem('username');
+            const storedIP = localStorage.getItem('userIP');
+            const userIP = await getUserIP();
+
+            if (storedIP && storedIP === userIP) {
+                alert(`Bienvenido de nuevo, ${storedUsername}. La sesión ya está activa.`);
+                window.location.href = 'index.html'; // Redirigir al usuario si ya tiene sesión
+            }
+        }
+
+        // Inicializar el sistema verificando la sesión activa
+        checkUserSession();
+
+        document.getElementById('userForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const username = document.getElementById('user-input').value.trim();
-            
-            if (username) {
-                // Guardar el nombre del usuario en el almacenamiento local
-                localStorage.setItem('username', username);
+            const userIP = await getUserIP();
 
-                // Redirigir a index.html
-                window.location.href = 'index.html';
+            if (username && userIP) {
+                const storedUsername = localStorage.getItem('username');
+                const storedIP = localStorage.getItem('userIP');
+
+                // Si ya existe una IP registrada, evitar el registro
+                if (storedIP && storedIP === userIP) {
+                    alert('Ya existe un usuario registrado con esta IP.');
+                    return;
+                }
+
+                // Guardar el nombre de usuario e IP en localStorage
+                localStorage.setItem('username', username);
+                localStorage.setItem('userIP', userIP);
+
+                alert('Registro exitoso. Sesión iniciada.');
+                window.location.href = 'index.html'; // Redirigir después del registro
             }
         });
     </script>
