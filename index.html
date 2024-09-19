@@ -1,5 +1,260 @@
 <!DOCTYPE html>
 <html lang="es">
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #202225;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #2f3136;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            border-radius: 50%;
+            margin-right: 10px;
+            width: 50px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #7289da;
+        }
+
+        nav {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #7289da;
+        }
+
+        .language-login {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-login .language {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-login .language img {
+            width: 25px;
+            border-radius: 50%;
+        }
+
+        .login-btn a {
+            text-decoration: none;
+            color: white;
+            background-color: #7289da;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn a:hover {
+            background-color: #677bc4;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .container, .recent-comments {
+            background-color: #2f3136;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .container {
+            width: 65%;
+        }
+
+        .recent-comments {
+            width: 30%;
+            height: fit-content;
+        }
+
+        .recent-comments h3 {
+            color: #1abc9c;
+            margin-bottom: 10px;
+        }
+
+        .thread {
+            margin-bottom: 20px;
+        }
+
+        .thread h2 {
+            color: #1abc9c;
+            margin-bottom: 10px;
+        }
+
+        .comment, .recent-comment {
+            background-color: #3b3e45;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .comment h3 {
+            margin: 0 0 5px;
+            font-size: 16px;
+            color: #7289da;
+        }
+
+        .comment p {
+            margin: 0;
+        }
+
+        .comment-date {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        .comment-form {
+            background-color: #3b3e45;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #2f3136;
+            color: white;
+            resize: none;
+            height: 100px;
+            outline: none;
+        }
+
+        .comment-form button {
+            background-color: #7289da;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-form button:hover {
+            background-color: #5b6eae;
+        }
+
+        .footer {
+            background-color: #2f3136;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .footer p {
+            margin: 0;
+            color: white;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            background-color: #7289da;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background-color: #677bc4;
+        }
+
+        #page-info {
+            font-size: 14px;
+            color: white;
+        }
+
+        .no-comments {
+            color: #95a5a6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .heart-react {
+            cursor: pointer;
+            font-size: 20px;
+            color: #ff0000;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .heart-react.active {
+            color: #ff9999;
+        }
+
+        .reaction-count {
+            font-size: 14px;
+            color: #ff9999;
+            position: absolute;
+            right: 40px;
+            top: 15px;
+        }
+
+        .highlight {
+            border: 2px solid #7289da;
+        }
+    </style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
