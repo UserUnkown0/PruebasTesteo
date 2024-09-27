@@ -1,12 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Discusión general en Infinity Galaxy">
-    <title>Discusión General - Infinity Galaxy</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         /* Estilos generales */
         * {
@@ -74,6 +67,12 @@
             gap: 20px;
         }
 
+        .language-login .language {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .language-login .language img {
             width: 25px;
             border-radius: 50%;
@@ -113,6 +112,7 @@
 
         .recent-comments {
             width: 30%;
+            height: fit-content;
         }
 
         .recent-comments h3 {
@@ -141,6 +141,10 @@
             margin: 0 0 5px;
             font-size: 16px;
             color: #7289da;
+        }
+
+        .comment p {
+            margin: 0;
         }
 
         .comment-date {
@@ -250,16 +254,15 @@
         .highlight {
             border: 2px solid #7289da;
         }
-
-        /* Estilos para el menú de perfil */
+ /* Agregamos estilos para el menú de perfil */
         .profile-menu {
-            display: none;
+            display: none; /* Oculto por defecto */
             position: absolute;
             background-color: #2f3136;
             border-radius: 5px;
             padding: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            right: 20px;
+            right: 20px; /* Ajustar según el diseño */
         }
 
         .profile-menu a {
@@ -273,25 +276,44 @@
             color: #7289da;
         }
     </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discusión general en Infinity Galaxy">
+    <title>Discusión General - Infinity Galaxy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Tus estilos permanecen igual */
+    </style>
 </head>
-
 <body>
-    <!-- Header -->
+  <!-- Header -->
     <header>
         <div class="logo">
             <img src="infinitygalaxy.ico" alt="Logo">
-            <h1> mj2</h1>
+            <h1>🪐𝙄𝙣𝙛𝙞𝙣𝙞𝙩𝙮 𝙂𝙖𝙡𝙖𝙭𝙮 ✨</h1>
         </div>
         <nav>
             <ul>
-                <li><a href="rule.html"><i class="fas fa-home"></i> Rules</a></li>
+                <li><a href="rule.html"><i class="fas fa-home"></i>Rules</a></li>
                 <li><a href="https://discord.gg/fuwrNKaJBC"><i class="fab fa-discord"></i> Join My Server</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i> Members</a></li>
-                <li><a href="#"><i class="fas fa-bars"></i> Premium</a></li>
-                <li><a href="#"><i class="fas fa-gem"></i> Soporte</a></li>
+                <li><a href="#"><i class="fas fa-heart"></i>Members</a></li>
+                <li><a href="#"><i class="fas fa-bars"></i>Premium</a></li>
+                <li><a href="#"><i class="fas fa-gem"></i>Soporte </a></li>
             </ul>
         </nav>
         <div class="language-login">
+            <div class="language">
+                <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Language Flag">
+                <span>EN</span>
+            </div>
+            <div class="login-btn">
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></div>
+        </div>
+    </header>
+
+
+<div class="language-login">
             <div class="language">
                 <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Language Flag">
                 <span>EN</span>
@@ -305,7 +327,7 @@
                 </div>
             </div>
         </div>
-    </header>
+
 
     <div class="main-content">
         <div class="container">
@@ -323,52 +345,180 @@
 
             <div class="comment-form">
                 <h3>Agregar un comentario:</h3>
-                <textarea id="comment-input" placeholder="Escribe tu comentario aquí..."></textarea>
-                <button id="submit-comment">Enviar</button>
+                <textarea id="comment-input" placeholder="Escribe tu comentario aquí..." required></textarea>
+                <button id="submit-comment">Enviar comentario</button>
             </div>
         </div>
 
         <div class="recent-comments">
             <h3>Comentarios Recientes</h3>
-            <div id="recent-comments-container">
-                <div class="recent-comment">
-                    <h4>Usuario 1</h4>
-                    <p>Este es un comentario reciente.</p>
-                    <span class="comment-date">Hace 1 hora</span>
-                </div>
-                <div class="recent-comment">
-                    <h4>Usuario 2</h4>
-                    <p>Otro comentario reciente.</p>
-                    <span class="comment-date">Hace 2 horas</span>
-                </div>
-            </div>
+            <div id="recent-comments-container"></div>
         </div>
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 Infinity Galaxy. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Infinity Galaxy - Todos los derechos reservados.</p>
     </div>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="script.js"></script>
+
+
     <script>
-        const loginBtn = document.getElementById('login-btn');
-        const profileMenu = document.getElementById('profile-menu');
+        const commentsContainer = document.getElementById('comments-container');
+        const recentCommentsContainer = document.getElementById('recent-comments-container');
+        const commentInput = document.getElementById('comment-input');
+        const submitCommentButton = document.getElementById('submit-comment');
+        const prevPageButton = document.getElementById('prev-page');
+        const nextPageButton = document.getElementById('next-page');
+        const pageInfo = document.getElementById('page-info');
+        const noCommentsMessage = document.getElementById('no-comments');
 
-        loginBtn.addEventListener('click', function (event) {
-            event.preventDefault();
-            // Toggle profile menu visibility
-            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
-        });
+        let comments = [];
+        let currentPage = 1;
+        const commentsPerPage = 6;
 
-        // Cerrar el menú al hacer clic fuera de él
-        window.addEventListener('click', function (event) {
-            if (!event.target.closest('.language-login')) {
-                profileMenu.style.display = 'none';
+        function renderComments() {
+            commentsContainer.innerHTML = '';
+            const startIndex = (currentPage - 1) * commentsPerPage;
+            const endIndex = startIndex + commentsPerPage;
+            const commentsToShow = comments.slice(startIndex, endIndex);
+
+            commentsToShow.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
+                commentElement.id = `comment-${comment.id}`;
+                commentElement.innerHTML = `
+                    <h3>${comment.username}</h3>
+                    <p>${comment.text}</p>
+                    <div class="comment-date">${comment.date}</div>
+                    <div class="heart-react ${comment.hasReacted ? 'active' : ''}" data-id="${comment.id}">&#10084;</div>
+                    <div class="reaction-count" data-id="${comment.id}">${comment.reactions}</div>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+
+            pageInfo.textContent = `Página ${currentPage} de ${Math.ceil(comments.length / commentsPerPage)}`;
+            prevPageButton.disabled = currentPage === 1;
+            nextPageButton.disabled = currentPage === Math.ceil(comments.length / commentsPerPage);
+
+            noCommentsMessage.style.display = comments.length === 0 ? 'block' : 'none';
+        }
+
+        function addComment(username, text) {
+            const newComment = {
+                id: comments.length + 1,
+                username,
+                text,
+                date: new Date().toLocaleDateString(),
+                reactions: 0,
+                hasReacted: false
+            };
+            comments.push(newComment);
+            renderComments();
+            renderRecentComments();
+        }
+
+        function renderRecentComments() {
+            recentCommentsContainer.innerHTML = '';
+            const recentComments = comments.slice(-5).reverse();
+
+            recentComments.forEach(comment => {
+                const recentCommentElement = document.createElement('div');
+                recentCommentElement.classList.add('recent-comment');
+                recentCommentElement.innerHTML = `
+                    <h4>${comment.username}</h4>
+                    <p>${comment.text}</p>
+                    <div class="comment-date">${comment.date}</div>
+                `;
+                recentCommentElement.addEventListener('click', () => {
+                    const commentElement = document.getElementById(`comment-${comment.id}`);
+                    if (commentElement) {
+                        commentElement.classList.add('highlight');
+                        setTimeout(() => {
+                            commentElement.classList.remove('highlight');
+                        }, 2000);
+                    }
+                });
+                recentCommentsContainer.appendChild(recentCommentElement);
+            });
+        }
+
+        submitCommentButton.addEventListener('click', () => {
+            const username = localStorage.getItem('username') || 'Usuario';
+            const text = commentInput.value.trim();
+
+            if (text) {
+                addComment(username, text);
+                commentInput.value = '';
+                currentPage = Math.ceil(comments.length / commentsPerPage);
+                renderComments();
             }
         });
+
+        prevPageButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderComments();
+            }
+        });
+
+        nextPageButton.addEventListener('click', () => {
+            if (currentPage < Math.ceil(comments.length / commentsPerPage)) {
+                currentPage++;
+                renderComments();
+            }
+        });
+
+        commentsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('heart-react')) {
+                const commentId = e.target.dataset.id;
+                const comment = comments.find(c => c.id == commentId);
+
+                if (comment) {
+                    if (!comment.hasReacted) {
+                        comment.reactions++;
+                        comment.hasReacted = true;
+                    } else {
+                        comment.reactions--;
+                        comment.hasReacted = false;
+                    }
+                    renderComments();
+                }
+            }
+        });
+
+        renderComments();
+        renderRecentComments();
+
+// Obtener el nombre de usuario almacenado en localStorage
+        const storedUsername = localStorage.getItem('username');
+        const loginButton = document.getElementById('login-btn');
+        const profileMenu = document.getElementById('profile-menu');
+
+        // Función para mostrar u ocultar el menú de perfil
+        function toggleProfileMenu() {
+            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Comprobar si hay un usuario logueado
+        if (storedUsername) {
+            loginButton.innerHTML = `<i class="fas fa-user"></i> ${storedUsername}`;
+            loginButton.onclick = toggleProfileMenu; // Asignar la función de mostrar menú al botón
+        }
+
+        // Cerrar sesión
+        document.getElementById('logout-link').addEventListener('click', () => {
+            localStorage.removeItem('username'); // Limpiar el usuario logueado
+            loginButton.innerHTML = `<i class="fas fa-sign-in-alt"></i> Login`; // Restablecer el botón
+            profileMenu.style.display = 'none'; // Ocultar menú
+            alert('Sesión cerrada');
+        });
+
+        // Cerrar el menú si se hace clic fuera
+        window.onclick = function(event) {
+            if (!event.target.matches('#login-btn')) {
+                profileMenu.style.display = 'none';
+            }
+        };
     </script>
 </body>
-
 </html>
-
