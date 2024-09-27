@@ -254,6 +254,27 @@
         .highlight {
             border: 2px solid #7289da;
         }
+ /* Agregamos estilos para el menú de perfil */
+        .profile-menu {
+            display: none; /* Oculto por defecto */
+            position: absolute;
+            background-color: #2f3136;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            right: 20px; /* Ajustar según el diseño */
+        }
+
+        .profile-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .profile-menu a:hover {
+            color: #7289da;
+        }
     </style>
 <head>
     <meta charset="UTF-8">
@@ -266,8 +287,7 @@
     </style>
 </head>
 <body>
-
-    <!-- Header -->
+  <!-- Header -->
     <header>
         <div class="logo">
             <img src="infinitygalaxy.ico" alt="Logo">
@@ -291,6 +311,23 @@
                 <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></div>
         </div>
     </header>
+
+
+<div class="language-login">
+            <div class="language">
+                <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Language Flag">
+                <span>EN</span>
+            </div>
+            <div class="login-btn">
+                <a id="login-btn" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <div class="profile-menu" id="profile-menu">
+                    <a href="#" id="profile-link">Perfil</a>
+                    <a href="#" id="settings-link">Configuración</a>
+                    <a href="#" id="logout-link">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+
 
     <div class="main-content">
         <div class="container">
@@ -322,6 +359,8 @@
     <div class="footer">
         <p>&copy; 2024 Infinity Galaxy - Todos los derechos reservados.</p>
     </div>
+
+
 
     <script>
         const commentsContainer = document.getElementById('comments-container');
@@ -449,6 +488,37 @@
 
         renderComments();
         renderRecentComments();
+
+// Obtener el nombre de usuario almacenado en localStorage
+        const storedUsername = localStorage.getItem('username');
+        const loginButton = document.getElementById('login-btn');
+        const profileMenu = document.getElementById('profile-menu');
+
+        // Función para mostrar u ocultar el menú de perfil
+        function toggleProfileMenu() {
+            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Comprobar si hay un usuario logueado
+        if (storedUsername) {
+            loginButton.innerHTML = `<i class="fas fa-user"></i> ${storedUsername}`;
+            loginButton.onclick = toggleProfileMenu; // Asignar la función de mostrar menú al botón
+        }
+
+        // Cerrar sesión
+        document.getElementById('logout-link').addEventListener('click', () => {
+            localStorage.removeItem('username'); // Limpiar el usuario logueado
+            loginButton.innerHTML = `<i class="fas fa-sign-in-alt"></i> Login`; // Restablecer el botón
+            profileMenu.style.display = 'none'; // Ocultar menú
+            alert('Sesión cerrada');
+        });
+
+        // Cerrar el menú si se hace clic fuera
+        window.onclick = function(event) {
+            if (!event.target.matches('#login-btn')) {
+                profileMenu.style.display = 'none';
+            }
+        };
     </script>
 </body>
 </html>
