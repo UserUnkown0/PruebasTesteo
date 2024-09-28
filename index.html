@@ -254,26 +254,53 @@
         .highlight {
             border: 2px solid #7289da;
         }
- /* Agregamos estilos para el menú de perfil */
-        .profile-menu {
-            display: none; /* Oculto por defecto */
+ /* ... (tus estilos existentes aquí) ... */
+
+        .avatar-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #7289da;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .submenu {
+            display: none;
             position: absolute;
             background-color: #2f3136;
-            border-radius: 5px;
+            border-radius: 4px;
             padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            right: 20px; /* Ajustar según el diseño */
+            top: 50px; /* Ajusta según sea necesario */
+            right: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .profile-menu a {
+        .avatar-container:hover .submenu {
+            display: block;
+        }
+
+        .submenu a {
+            display: block;
             color: white;
             text-decoration: none;
-            display: block;
-            margin: 5px 0;
+            padding: 5px;
+            transition: background-color 0.3s;
         }
 
-        .profile-menu a:hover {
-            color: #7289da;
+        .submenu a:hover {
+            background-color: #3b3e45;
         }
     </style>
 <head>
@@ -312,16 +339,15 @@
         </div>
 /avatar cambiar/
 
-            <div class="login-btn">
-                <a id="login-btn" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <div class="profile-menu" id="profile-menu">
+             <div id="avatar-container" class="avatar-container">
+                <div id="avatar" class="avatar">U</div>
+                <div class="submenu">
                     <a href="#" id="profile-link">Perfil</a>
                     <a href="#" id="settings-link">Configuración</a>
                     <a href="#" id="logout-link">Cerrar sesión</a>
                 </div>
             </div>
         </div>
-
 
     </header>
 
@@ -485,36 +511,24 @@
         renderComments();
         renderRecentComments();
 
-// Obtener el nombre de usuario almacenado en localStorage
-        const storedUsername = localStorage.getItem('username');
-        const loginButton = document.getElementById('login-btn');
-        const profileMenu = document.getElementById('profile-menu');
-
-        // Función para mostrar u ocultar el menú de perfil
-        function toggleProfileMenu() {
-            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+ // Lógica de avatar y submenús
+        function updateAvatar() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                const avatar = document.getElementById('avatar');
+                avatar.textContent = username.charAt(0).toUpperCase(); // Muestra la inicial del usuario
+            }
         }
 
-        // Comprobar si hay un usuario logueado
-        if (storedUsername) {
-            loginButton.innerHTML = `<i class="fas fa-user"></i> ${storedUsername}`;
-            loginButton.onclick = toggleProfileMenu; // Asignar la función de mostrar menú al botón
-        }
-
-        // Cerrar sesión
         document.getElementById('logout-link').addEventListener('click', () => {
-            localStorage.removeItem('username'); // Limpiar el usuario logueado
-            loginButton.innerHTML = `<i class="fas fa-sign-in-alt"></i> Login`; // Restablecer el botón
-            profileMenu.style.display = 'none'; // Ocultar menú
-            alert('Sesión cerrada');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userIP');
+            location.reload(); // Recarga la página para mostrar el estado de no sesión
         });
 
-        // Cerrar el menú si se hace clic fuera
-        window.onclick = function(event) {
-            if (!event.target.matches('#login-btn')) {
-                profileMenu.style.display = 'none';
-            }
-        };
+        updateAvatar(); // Actualiza el avatar al cargar la página
+        renderComments();
+        renderRecentComments();
     </script>
 </body>
 </html>
