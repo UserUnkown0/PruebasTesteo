@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos (sin cambios respecto a tu código original) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #36393F;
+            color: #FFFFFF;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* Barra lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #2F3136;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+        .menu {
+            width: 100%;
+        }
+
+        .menu ul {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #B9BBBE;
+            font-size: 16px;
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #4F545C;
+            color: #FFFFFF;
+        }
+
+        /* Contenedor de edición */
+        .edit-container {
+            flex: 1;
+            background-color: #36393F;
+            padding: 20px;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+
+        .profile-content h1 {
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-form label {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .profile-form input,
+        .profile-form textarea {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #2F3136;
+            border: none;
+            color: #FFFFFF;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .profile-form button {
+            padding: 10px 20px;
+            background-color: #5865F2;
+            border: none;
+            color: #FFFFFF;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-form button:hover {
+            background-color: #4752C4;
+        }
+
+        .avatar-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .avatar-buttons button {
+            background-color: #5865F2;
+            padding: 8px 12px;
+            border: none;
+            color: #FFF;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .avatar-buttons button:hover {
+            background-color: #4752C4;
+        }
+
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .color-box {
+            width: 30px;
+            height: 30px;
+            background-color: #5865F2;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .color-box:hover {
+            outline: 2px solid #FFFFFF;
+        }
+
+        /* Vista previa del perfil */
+        .preview-container {
+            flex: 1;
+            background-color: #2F3136;
+            border: 2px solid #5865F2;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            max-width: 400px;
+            overflow: hidden;
+        }
+
+        .preview-banner {
+            background-color: #5865F2;
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .preview-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #2F3136;
+            position: relative;
+            top: 50px;
+            z-index: 2;
+            background-color: #FFF;
+            object-fit: cover;
+        }
+
+        .preview-content {
+            margin-top: 70px;
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            overflow-wrap: break-word;
+        }
+
+        .preview-content h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .preview-content .pronouns {
+            font-size: 14px;
+            color: #B9BBBE;
+            margin-bottom: 10px;
+        }
+
+        .preview-content .badges {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .preview-description {
+            font-size: 14px;
+            color: #B9BBBE;
+        }
+
+        /* Estilos para los rangos */
+        .ranks-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rank {
+            background-color: #2F3136;
+            color: #B9BBBE;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .selected-ranks {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .selected-rank {
+            background-color: #5865F2;
+            color: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <div class="avatar-section">
+                <img src="" alt="Avatar" class="avatar" id="avatar">
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="#">Configuración de cuenta</a></li>
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Seguridad</a></li>
+                    <li><a href="#">Cerrar sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenedor de edición -->
+        <div class="edit-container">
+            <h1>Mi Perfil</h1>
+            <form class="profile-form">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" placeholder="Tu Nombre" maxlength="30" required>
+
+                <label for="pronouns">Pronombres:</label>
+                <input type="text" id="pronouns" name="pronouns" placeholder="Él/Ella/Elles" maxlength="30">
+
+                <label>Avatar:</label>
+                <div class="avatar-buttons">
+                    <button type="button" id="change-avatar">Cambiar Avatar</button>
+                    <button type="button" id="remove-avatar">Eliminar Avatar</button>
+                </div>
+
+                <label for="color">Color de cartel:</label>
+                <div class="color-picker">
+                    <div class="color-box" id="color-box"></div>
+                    <input type="hidden" id="color" name="color">
+                </div>
+
+                <label for="bio">Descripción:</label>
+                <textarea id="bio" name="bio" rows="4" maxlength="150">Una breve descripción sobre mí.</textarea>
+
+                <label for="ranks">Selecciona tu rango:</label>
+                <div class="ranks-container" id="ranks-container">
+                    <div class="rank" onclick="toggleRank(this)">Rango 1</div>
+                    <div class="rank" onclick="toggleRank(this)">Rango 2</div>
+                    <div class="rank" onclick="toggleRank(this)">Rango 3</div>
+                </div>
+
+                <div class="selected-ranks" id="selected-ranks"></div>
+
+                <button type="button" id="save-profile">Guardar</button>
+            </form>
+        </div>
+
+        <!-- Vista previa -->
+        <div class="preview-container">
+            <div class="preview-banner" id="preview-banner"></div>
+            <img src="" alt="Avatar" class="preview-avatar" id="preview-avatar">
+            <div class="preview-content">
+                <h2 id="preview-name">Nombre de usuario</h2>
+                <div class="pronouns" id="preview-pronouns">Pronombres</div>
+                <div class="badges" id="preview-badges"></div>
+                <p class="preview-description" id="preview-description">Descripción de perfil aquí.</p>
+                <div class="selected-ranks" id="preview-selected-ranks"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const avatarInput = document.getElementById('avatar');
+        const nameInput = document.getElementById('name');
+        const pronounsInput = document.getElementById('pronouns');
+        const bioInput = document.getElementById('bio');
+        const colorInput = document.getElementById('color');
+        const colorBox = document.getElementById('color-box');
+        const saveButton = document.getElementById('save-profile');
+        const selectedRanksContainer = document.getElementById('selected-ranks');
+        const previewName = document.getElementById('preview-name');
+        const previewPronouns = document.getElementById('preview-pronouns');
+        const previewDescription = document.getElementById('preview-description');
+        const previewAvatar = document.getElementById('preview-avatar');
+        const previewBanner = document.getElementById('preview-banner');
+        const previewSelectedRanksContainer = document.getElementById('preview-selected-ranks');
+
+        let selectedRanks = [];
+
+        // Función para mostrar el avatar en el lado del perfil
+        document.getElementById('change-avatar').onclick = function () {
+            const url = prompt('Introduce la URL del nuevo avatar:');
+            if (url) {
+                avatarInput.src = url;
+                previewAvatar.src = url;
+            }
+        };
+
+        // Función para eliminar el avatar
+        document.getElementById('remove-avatar').onclick = function () {
+            avatarInput.src = '';
+            previewAvatar.src = '';
+        };
+
+        // Función para mostrar el color de fondo
+        colorBox.onclick = function () {
+            const color = prompt('Introduce un color en formato hex (#RRGGBB) o nombre de color:');
+            if (color) {
+                colorInput.value = color;
+                colorBox.style.backgroundColor = color;
+                previewBanner.style.backgroundColor = color;
+            }
+        };
+
+        // Función para guardar el perfil
+        saveButton.onclick = function () {
+            previewName.textContent = nameInput.value || "Nombre de usuario";
+            previewPronouns.textContent = pronounsInput.value || "Pronombres";
+            previewDescription.textContent = bioInput.value || "Descripción de perfil aquí.";
+            previewBanner.style.backgroundColor = colorInput.value || '#5865F2'; // Usar color por defecto
+            previewAvatar.src = avatarInput.src || '';
+
+            // Mostrar los rangos seleccionados en la vista previa
+            updatePreviewRanks();
+        };
+
+        // Función para alternar la selección de rangos
+        function toggleRank(element) {
+            const rankText = element.textContent;
+            if (selectedRanks.includes(rankText)) {
+                selectedRanks = selectedRanks.filter(rank => rank !== rankText);
+                element.style.backgroundColor = '#2F3136';
+            } else {
+                selectedRanks.push(rankText);
+                element.style.backgroundColor = '#5865F2';
+            }
+            updatePreviewRanks();
+        }
+
+        // Función para actualizar la vista previa de los rangos
+        function updatePreviewRanks() {
+            previewSelectedRanksContainer.innerHTML = ''; // Limpiar los rangos anteriores
+            selectedRanks.forEach(rank => {
+                const rankElement = document.createElement('div');
+                rankElement.className = 'selected-rank';
+                rankElement.textContent = rank;
+                previewSelectedRanksContainer.appendChild(rankElement);
+            });
+        }
+
+        // Mostrar rangos en la vista previa inicialmente
+        function initializePreview() {
+            previewName.textContent = "Nombre de usuario";
+            previewPronouns.textContent = "Pronombres";
+            previewDescription.textContent = "Descripción de perfil aquí.";
+            updatePreviewRanks();
+        }
+
+        // Inicializa la vista previa
+        initializePreview();
+    </script>
+</body>
+</html>
